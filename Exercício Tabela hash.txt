@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define tam_hash 11
+
+typedef struct Celula{
+  int valor;
+  struct Celula *proximo;
+}Celula;
+
+typedef struct Lista{
+  Celula *primeiro;
+}Lista;
+
+typedef struct Hash {
+  Lista *valores[tam_hash];
+  int quantidade;
+}Hash;
+
+Celula *criaCelula(){
+    Celula *celula = malloc(sizeof(Celula));
+    celula->valor = 0;
+    celula->proximo = NULL;
+    return celula;
+}
+
+Lista *criaLista(){
+    Lista *lista = malloc(sizeof(Lista));
+    lista->primeiro = NULL;
+    return lista;
+}
+
+Hash* start_hash(){
+  Hash *hash = malloc(sizeof(Hash));
+  hash->quantidade = tam_hash;
+  for(int i=0 ; i<tam_hash; i++){
+      hash->valores[i] = criaLista();
+  }
+  return hash;
+}
+
+int hashed(int valor){
+    return valor % tam_hash;
+}
+
+void inserir_hash(Hash* hash, int valor){
+  Celula *nova = criaCelula();
+  int indice = hashed(valor);
+  
+  nova->proximo = hash->valores[indice]->primeiro;
+  hash->valores[indice]->primeiro = nova;
+  
+}
+
+void remover_hash(Hash* hash, int valor){
+  int indice = hashed(valor);
+  Celula *anterior = NULL;
+  Celula *atual = hash->valores[indice]->primeiro;
+  Celula *temp = criaCelula();
+  while(atual != NULL && atual->valor != valor){
+      anterior = atual;
+      atual = atual->proximo;
+  }
+  
+  
+  free(temp);
+}
+
+void imprimir(Hash* hash){
+   printf("---------------------\n");
+    for (int i = 0; i < hash->quantidade; i++) {
+        printf("%d ->", i);
+        Celula* atual = hash->valores[i]->primeiro;
+        while (atual != NULL) {
+            printf(" %d", atual->valor);
+            atual = atual->proximo;
+        }
+        printf("\n");
+    }
+    printf("---------------------\n");
+}
+
+int main(void) {
+  Hash* hash = start_hash();
+  int valor;
+  while(1){
+    scanf("%d", &valor);
+    if(valor == 0)
+      break;
+    inserir_hash(hash, valor);
+  }
+  imprimir(hash);
+  while(1){
+    scanf("%d", &valor);
+    if(valor == 0)
+      break;
+    remover_hash(hash, valor);
+  }
+  imprimir(hash);
+  return 0;
+}
