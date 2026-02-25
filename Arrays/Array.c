@@ -17,6 +17,7 @@ int buscar(int vetor[], int tamanho, int valor){
 	}
 	return -1;
 }
+
 void inserir_no_final(int vetor[], int *quantidade, const int *capacidade, int valor){
 	if(*quantidade == *capacidade){
 		printf("O Array está na sua capacidade máxima");
@@ -26,16 +27,26 @@ void inserir_no_final(int vetor[], int *quantidade, const int *capacidade, int v
 	(*quantidade)++;
 }
 
-void main(){
+void inserir_na_posicao(int vetor[], int *quantidade, const int *capacidade, int posicao, int valor){
+	if(posicao < 0 || posicao >= *capacidade){
+		return;
+	}
+	if(posicao > *quantidade){
+		printf("Posição inválida\n");
+		return;
+	}
+	for(int i = *quantidade; i > posicao; i--){
+		vetor[i] = vetor[i-1];
+	}
+	vetor[posicao] = valor;
+	(*quantidade)++;
+}
+
+int main(){
 	const int TAMANHO = 10;
 	int vetor[TAMANHO]; 
 	int valor;
 	int quantidade = 0;
-
-	for(int i = 0; i < 8; i++){
-		vetor[i] = 0;
-		quantidade++;
-	}
 
 	imprime_vetor(vetor,quantidade);
 
@@ -54,4 +65,11 @@ void main(){
 		printf("%d ", posicao);
 		printf("\n");
 	}
+	inserir_na_posicao(vetor,&quantidade,&TAMANHO,0,4);
+	imprime_vetor(vetor,quantidade);
+	inserir_na_posicao(vetor,&quantidade,&TAMANHO,1,5);
+	imprime_vetor(vetor,quantidade);
+	inserir_na_posicao(vetor,&quantidade,&TAMANHO,0,1);
+	imprime_vetor(vetor,quantidade);
+	return 0;
 }
