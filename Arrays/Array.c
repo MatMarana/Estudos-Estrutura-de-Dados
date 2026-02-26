@@ -42,6 +42,35 @@ void inserir_na_posicao(int vetor[], int *quantidade, const int *capacidade, int
 	(*quantidade)++;
 }
 
+void remover_na_posicao(int vetor[], int *quantidade, const int *capacidade, int posicao){
+	if(posicao < 0 || posicao >= *capacidade){
+		return;
+	}
+	
+	if(posicao > *quantidade){
+		printf("Posição inválida");
+		return;
+	}
+
+	for(int i = posicao; i < *quantidade; i++){
+		vetor[i]=vetor[i+1];
+	}	
+
+	(*quantidade)--;
+}
+
+void remover_valor(int vetor[], int *quantidade, int valor){
+	int posicao = buscar(vetor,*quantidade,valor);
+	if(posicao==-1){
+		printf("O valor não exite na lista");
+		return;
+	}	
+	for(int i = posicao; i < *quantidade; i++){
+		vetor[i] = vetor[i+1];
+	}
+	(*quantidade)--;
+}
+
 int main(){
 	const int TAMANHO = 10;
 	int vetor[TAMANHO]; 
@@ -70,6 +99,10 @@ int main(){
 	inserir_na_posicao(vetor,&quantidade,&TAMANHO,1,5);
 	imprime_vetor(vetor,quantidade);
 	inserir_na_posicao(vetor,&quantidade,&TAMANHO,0,1);
+	imprime_vetor(vetor,quantidade);
+	remover_na_posicao(vetor,&quantidade,&TAMANHO,0);
+	imprime_vetor(vetor,quantidade);
+	remover_valor(vetor,&quantidade,5);
 	imprime_vetor(vetor,quantidade);
 	return 0;
 }
